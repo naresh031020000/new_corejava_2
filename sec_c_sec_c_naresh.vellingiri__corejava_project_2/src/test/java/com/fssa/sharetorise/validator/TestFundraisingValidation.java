@@ -4,10 +4,15 @@ import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
 import java.time.LocalDate;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Set;
+import java.util.TreeSet;
 
 import org.junit.jupiter.api.Test;
 
 import com.fssa.sharetorise.exceptions.InvalidInputException;
+import com.fssa.sharetorise.model.Certificate;
 import com.fssa.sharetorise.model.FundRaiser;
 
 public class TestFundraisingValidation {
@@ -19,12 +24,25 @@ public class TestFundraisingValidation {
 	@Test
 	void testValidFundingRaiser() {
 
+
 		FundRaiser fund = new FundRaiser();
+		
 
 		fund.setTitle("Fund for Football");
 		fund.setDescription("This fund is need for future football player who needs fund for his financial ");
 		fund.setFundEndingDate(LocalDate.of(2023, 8, 26));
 		fund.setFundingGoal(3000);
+		
+		
+		List<Certificate>certificates = new ArrayList<>();
+		certificates.add(new Certificate());
+		certificates.add(new Certificate());
+		
+		
+		
+		fund.setCertificate(certificates);
+		
+		
 
 		assertDoesNotThrow(() -> validator.validateFundingRaiser(fund)); 
 
@@ -32,6 +50,7 @@ public class TestFundraisingValidation {
 
 	@Test
 	void testInvalidFundingRaiser() {
+		
 
 		FundRaiser fund = null;
 
@@ -112,7 +131,7 @@ public class TestFundraisingValidation {
 		String invalidDescription = null;
 
 		// Act and Assert
-		assertThrows(InvalidInputException.class, () -> validator.validateDescription(invalidDescription));
+		assertThrows(FundraiserErrors.class, () -> validator.validateDescription(invalidDescription));
 	}
 
 	@Test
@@ -219,5 +238,27 @@ public class TestFundraisingValidation {
 		// Act and Assert
 		assertThrows(InvalidInputException.class, () -> validator.validateFundEndingDate(invalidEndingDate));
 	}
+	
+	
+	
+	
+	@Test
+	  
+	void testCertificateObj() {
+		
+		FundraisingValidator fundraisingValidator = new FundraisingValidator();
+		
+		Certificate certificate = new Certificate();
+		
+		certificate.setCerNum("1wwert7hjk");
+		certificate.setCerUrl("https://www.kasandbox.org/programming-images/avatars/spunky-sam.png");
+		
+		
+		fundraisingValidator.validateCertficateObject(certificate);
+		
+		
+	}
+
+
 
 }

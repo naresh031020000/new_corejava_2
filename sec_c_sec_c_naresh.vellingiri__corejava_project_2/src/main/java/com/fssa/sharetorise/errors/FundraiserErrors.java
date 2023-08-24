@@ -14,6 +14,12 @@ public class FundraiserErrors {
 	public static final String INVALID_FUNDING_GOAL = "Amount can't be negative or less than minimal amount.";
 
 	public static final String INVALID_FUND_ENDING_DATE = "Fund ending date cannot be null.";
+	
+	
+	public static final String INVALID_CERTIFICATE_URL = "Certificate url's can't be null or empty.";
+
+
+	public static final String INVALID_CERTIFICATE_NUM = "Certificate url's can't be null or empty.";
 
 
 }

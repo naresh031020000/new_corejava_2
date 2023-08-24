@@ -5,12 +5,16 @@ import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 
 import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.List;
+import java.util.Set;
+import java.util.TreeSet;
 
 import org.junit.jupiter.api.Test;
 
 import com.fssa.sharetorise.dao.ShareToRiseDAO;
 import com.fssa.sharetorise.logger.Logger;
+import com.fssa.sharetorise.model.Certificate;
 import com.fssa.sharetorise.model.FundRaiser;
 
 public class TestUserService {
@@ -29,46 +33,54 @@ public class TestUserService {
 
 	void testCreateFundraiser() {
 
+
+		FundRaiser fund = new FundRaiser();
+
 //    	FundraisingValidator
 
-		fundraiser.setTitle("Fund for Hemanath");
-		fundraiser.setDescription("This fund is need for future football player who needs fund for his financial ");
-		fundraiser.setFundEndingDate(LocalDate.of(2023, 8, 26));
-		fundraiser.setFundingGoal(3000);
+		fund.setTitle("Fund for Balaji");
+		fund.setDescription("This fund is need for future football player who needs fund for his financial ");
+		fund.setFundEndingDate(LocalDate.of(2023, 8, 26));
+		fund.setImageUrl("https://www.kasandbox.org/programming-images/avatars/spunky-sam.png");
+		fund.setFundingGoal(3000);
 
-		assertDoesNotThrow(() -> user.createFundraiser(fundraiser));
+		List<Certificate> certificates = new ArrayList<>();
+		certificates.add(
+				new Certificate("h369sjfn", "https://www.kasandbox.org/programming-images/avatars/spunky-sam.png"));
+		certificates
+				.add(new Certificate("h647jfn", "https://www.kasandbox.org/programming-images/avatars/spunky-sam.png"));
+
+		fund.setCertificate(certificates);
+
+		assertDoesNotThrow(() -> user.createFundraiser(fund));
 
 	}
 
 	@Test
 
-	void testUpdateFundraiser() {
+	void testUpdateFundraiser() { 
 
+ 
 //    	FundraisingValidator
+		FundRaiser fund = new FundRaiser();
 
-		fundraiser.setTitle("Fund for naresh");
-		fundraiser.setDescription("This fund is need for future football player who needs fund for his financial ");
-		fundraiser.setFundEndingDate(LocalDate.of(2023, 8, 26));
-		fundraiser.setFundingGoal(4321);
-		fundraiser.setFundraiserId(1);
+		fund.setTitle("Fund for naresh");
+		fund.setDescription("This fund is need for future football player who needs fund for his financial ");
+		fund.setFundEndingDate(LocalDate.of(2023, 8, 26));
+		fund.setFundingGoal(8998);
+		fund.setImageUrl("https://www.kasandbox.org/programming-images/avatars/spunky-sam.png");
 
-		assertDoesNotThrow(() -> user.updateFundraiser(fundraiser));
+		List<Certificate> certificates = new ArrayList<>();
+		certificates.add(
+				new Certificate("h369sjfn", "https://www.kasandbox.org/programming-images/avatars/spunky-sam.png"));
+		certificates
+				.add(new Certificate("h647jfn", "https://www.kasandbox.org/programming-images/avatars/spunky-sam.png"));
 
-	}
-
-	@Test
-	void testReadAllFundraisers() {
-
-		List<FundRaiser> fundingRaiserList = user.readAllFundraiser();
-
-		assertNotNull(fundingRaiserList);
-		assertFalse(fundingRaiserList.isEmpty());
-
-		for (FundRaiser fundRaiser : fundingRaiserList) {
-
-			log.info(fundRaiser);
-		}
+		fund.setCertificate(certificates);
+		assertDoesNotThrow(() -> user.updateFundraiser(fund, 1));
 
 	}
+
+	
 
 }

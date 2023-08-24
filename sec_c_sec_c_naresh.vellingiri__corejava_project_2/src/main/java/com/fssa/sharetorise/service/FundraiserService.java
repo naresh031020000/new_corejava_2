@@ -21,25 +21,14 @@ public class FundraiserService {
 	}
 
 	
-	public boolean updateFundraiser (FundRaiser fundraiser) throws  DAOException {
+	public boolean updateFundraiser (FundRaiser fundraiser, int id) throws  DAOException {
 		
 		if(validator.validateFundingRaiser(fundraiser))
-			return dao.updateFundraiser(fundraiser);
+			return dao.updateFundraiser(fundraiser, id);
 
 		return false;
 	}
 	
 	
-	public List<FundRaiser> readAllFundraiser () throws  DAOException {
-		
-		return dao.readAllFundraisers();
-	}
-
 	
-//	public boolean delete (int fundraiserId) throws  DAOException {
-//
-//	if(dao.getAllFundraiserIds().contains(fundraiserId)) {
-//		return dao.readAllFundraisers(fundraiserId);
-//	}
-//	}
 }

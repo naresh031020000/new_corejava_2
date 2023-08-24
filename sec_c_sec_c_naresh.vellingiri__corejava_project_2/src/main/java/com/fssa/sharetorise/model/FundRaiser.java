@@ -1,6 +1,7 @@
 package com.fssa.sharetorise.model;
 
 import java.time.LocalDate;
+import java.util.List;
 import java.util.Set;
 
 /*
@@ -10,33 +11,26 @@ import java.util.Set;
  * */
 public class FundRaiser {
 
-	private int fundraiserId;
+	private int fundraiserId;// ===============
 
-	private String title;
+	private String title;// ===============
 
-	private String description;
+	private String description;// ===============
 
-	private double fundingGoal;
+	private double fundingGoal;// ===============
 
-	private LocalDate fundEndingDate;
+	private LocalDate fundEndingDate;// ===============
 
 	private String imageUrl;
 
-	private Set<Certificate> certificate;
-
-	private SportsType sport;
-
-	private WorkType work;
-
-	private EducationalQualification education;
+	private List<Certificate> certificate;// create set 1-img1;2-img2
 
 	public FundRaiser() {
 
 	}
 
 	public FundRaiser(int fundraiserId, String title, String description, double fundingGoal, LocalDate fundEndingDate,
-			String imageUrl, Set<Certificate> certificate, SportsType sport, WorkType work,
-			EducationalQualification education) {
+			String imageUrl, List<Certificate> certificate) {
 		this.fundraiserId = fundraiserId;
 		this.title = title;
 		this.description = description;
@@ -44,9 +38,7 @@ public class FundRaiser {
 		this.fundEndingDate = fundEndingDate;
 		this.imageUrl = imageUrl;
 		this.certificate = certificate;
-		this.sport = sport;
-		this.work = work;
-		this.education = education;
+
 	}
 
 	public int getFundraiserId() {
@@ -97,36 +89,12 @@ public class FundRaiser {
 		this.imageUrl = imageUrl;
 	}
 
-	public Set<Certificate> getCertificate() {
+	public List<Certificate> getCertificate() {
 		return certificate;
 	}
 
-	public void setCertificate(Set<Certificate> certificate) {
+	public void setCertificate(List<Certificate> certificate) {
 		this.certificate = certificate;
-	}
-
-	public SportsType getSport() {
-		return sport;
-	}
-
-	public void setSport(SportsType sport) {
-		this.sport = sport;
-	}
-
-	public WorkType getWork() {
-		return work;
-	}
-
-	public void setWork(WorkType work) {
-		this.work = work;
-	}
-
-	public EducationalQualification getEducation() {
-		return education;
-	}
-
-	public void setEducation(EducationalQualification education) {
-		this.education = education;
 	}
 
 	@Override

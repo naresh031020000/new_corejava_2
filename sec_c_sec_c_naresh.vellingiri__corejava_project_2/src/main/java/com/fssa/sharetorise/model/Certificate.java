@@ -5,6 +5,10 @@ public class Certificate {
 	private String cerNum;
 	private String cerUrl;
 	
+	public Certificate() {
+		
+	}
+	
 	public Certificate(String cerNum, String cerUrl) {
 		super();
 		this.cerNum = cerNum;

@@ -13,6 +13,7 @@ import java.util.regex.Pattern;
 
 import com.fssa.sharetorise.errors.FundraiserErrors;
 import com.fssa.sharetorise.exceptions.InvalidInputException;
+import com.fssa.sharetorise.model.Certificate;
 import com.fssa.sharetorise.model.FundRaiser;
 
 public class FundraisingValidator {
@@ -21,7 +22,7 @@ public class FundraisingValidator {
 
 		if (fund == null) {
 
-			throw new InvalidInputException(FundraiserErrors.INVALID_ID);
+			throw new InvalidInputException(FundraiserErrors.INVALID_OBJ);
 		}
 
 		validateTitle(fund.getTitle());
@@ -106,7 +107,7 @@ public class FundraisingValidator {
 	public boolean validateFundingGoal(double fundingGoal) throws InvalidInputException {
 		// Check if the funding goal is greater than 2000
 		if (fundingGoal <= 2000) {
-			throw new InvalidInputException(FundraiserErrors.Funding_Goal);
+			throw new InvalidInputException(FundraiserErrors.INVALID_FUNDING_GOAL);
 		}
 		return true;
 	}
@@ -122,14 +123,92 @@ public class FundraisingValidator {
 	public boolean validateFundEndingDate(LocalDate fundEndingDate) throws InvalidInputException {
 		// Check if the ending date is not null and is not before the current date
 		if (fundEndingDate == null) {
-			throw new InvalidInputException(FundraiserErrors.Fund_Ending_Date);
+			throw new InvalidInputException(FundraiserErrors.INVALID_FUND_ENDING_DATE);
 		}
 
 		LocalDate today = LocalDate.now();
 		if (fundEndingDate.isBefore(today)) {
-			throw new InvalidInputException(FundraiserErrors.Fund_Ending_Date);
+			throw new InvalidInputException(FundraiserErrors.INVALID_FUND_ENDING_DATE);
 		}
 
 		return true;
 	}
+	
+	
+	public boolean validateCertficateObject(Certificate certificate) throws InvalidInputException {
+	
+		validateCertificateNumber(certificate.getCerNum());
+	
+		validateCertificateURL(certificate.getCerUrl());
+		
+		
+		return true;
+	}
+	
+	
+	
+	
+	public boolean validateCertificateURL(String certificateUrl) throws InvalidInputException {
+		// Check if the title is not null, not empty, and at least 30 characters long
+		if (certificateUrl == null || certificateUrl.equals("") || certificateUrl.length()<=0) {
+			throw new InvalidInputException(FundraiserErrors.INVALID_CERTIFICATE_URL);
+		}
+
+		// Use a regular expression to check if the title contains only letters (no
+		// numbers or special characters)
+		String nameregex = "^(http(s):\\/\\/.)[-a-zA-Z0-9@:%._\\+~#=]{2,256}\\.[a-z]{2,6}\\b([-a-zA-Z0-9@:%_\\+.~#?&//=]*)$";
+		Pattern pattern = Pattern.compile(nameregex);
+		Matcher matcher = pattern.matcher(certificateUrl);
+		Boolean isMatch = matcher.matches();
+
+		// If the title does not match the regular expression, it is considered invalid
+		if (!isMatch) {
+			throw new InvalidInputException(FundraiserErrors.INVALID_CERTIFICATE_URL);
+		}
+
+		return true;
+	}
+	
+	
+	public boolean validateCertificateNumber(String certificateNumber) throws InvalidInputException {
+	    // Check if the certificate number is not null, not empty, and meets length requirements
+		System.out.println(certificateNumber.length());
+	    if (certificateNumber == null || certificateNumber.isEmpty() || certificateNumber.length() < 8) {
+	        throw new InvalidInputException(FundraiserErrors.INVALID_CERTIFICATE_NUM);
+	    }
+
+	    // Use a regular expression to check if the certificate number contains alphanumeric characters
+	    String numberRegex = "^[a-zA-Z0-9]+$";
+	    Pattern pattern = Pattern.compile(numberRegex);
+	    Matcher matcher = pattern.matcher(certificateNumber);
+	    boolean isMatch = matcher.matches();
+
+	    // If the certificate number does not match the regular expression, it is considered invalid
+	    if (!isMatch) {
+	        throw new InvalidInputException(FundraiserErrors.INVALID_CERTIFICATE_NUM);
+	    }
+
+	    return true;
+	}
+
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
 }
