@@ -1,13 +1,14 @@
 package com.fssa.sharetorise.validator;
 
 import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.junit.jupiter.api.Assertions.fail;
 
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Set;
-import java.util.TreeSet;
 
 import org.junit.jupiter.api.Test;
 
@@ -25,13 +26,18 @@ public class TestFundraisingValidation {
 	void testValidFundingRaiser() {
 
 
+		
 		FundRaiser fund = new FundRaiser();
 		
 
 		fund.setTitle("Fund for Football");
 		fund.setDescription("This fund is need for future football player who needs fund for his financial ");
-		fund.setFundEndingDate(LocalDate.of(2023, 8, 26));
+		fund.setFundEndingDate(LocalDate.of(2023, 12, 26));
 		fund.setFundingGoal(3000);
+		fund.setImageUrl("https://staticg.sportskeeda.com/Football+wallpapers/CR7/cr7.jpg");
+
+		
+		
 		
 		
 		List<Certificate>certificates = new ArrayList<>();
@@ -42,8 +48,7 @@ public class TestFundraisingValidation {
 		
 		fund.setCertificate(certificates);
 		
-		
-
+	
 		assertDoesNotThrow(() -> validator.validateFundingRaiser(fund)); 
 
 	}
@@ -78,6 +83,9 @@ public class TestFundraisingValidation {
 		assertThrows(InvalidInputException.class, () -> validator.validateTitle(invalidTitle));
 	}
 
+	
+	
+	
 	@Test
 	void testValidateTitleInvalidEmpty() {
 		// Arrange
@@ -114,6 +122,7 @@ public class TestFundraisingValidation {
 		assertThrows(InvalidInputException.class, () -> validator.validateTitle(invalidTitle));
 	}
 
+	
 //    Test cases for validating String Description attribute
 
 	@Test
@@ -131,7 +140,7 @@ public class TestFundraisingValidation {
 		String invalidDescription = null;
 
 		// Act and Assert
-		assertThrows(FundraiserErrors.class, () -> validator.validateDescription(invalidDescription));
+		assertThrows(InvalidInputException.class, () -> validator.validateDescription(invalidDescription));
 	}
 
 	@Test
@@ -251,13 +260,86 @@ public class TestFundraisingValidation {
 		Certificate certificate = new Certificate();
 		
 		certificate.setCerNum("1wwert7hjk");
-		certificate.setCerUrl("https://www.kasandbox.org/programming-images/avatars/spunky-sam.png");
+		certificate.setCerUrl("https://iili.io/HvSRHRS.jpg");
 		
 		
-		fundraisingValidator.validateCertficateObject(certificate);
-		
-		
+		assertDoesNotThrow(() -> fundraisingValidator.validateCertficateObject(certificate));
+
+			
 	}
+	
+	
+	
+	@Test
+	void testImageUrlWithValid() {
+
+		String[] validImageUrl = { "https://freeimghost.net/images/2023/03/01/apple-green.jpeg",
+				"https://freeimghost.net/images/2023/03/01/avacado.png",
+				"https://freeimghost.net/images/2023/03/01/blueberry.jpeg",
+				"https://freeimghost.net/images/2023/03/01/dragon-fruit.png"
+				
+		 };
+
+		for (String url : validImageUrl) {
+
+
+				assertTrue(validator.validateImageURL(url));
+			 
+			
+
+		}
+
+	}
+
+//	test the image url with differen null inputs
+	@Test
+	void testImageUrlWithNullInputs() {
+
+		String[] invalidImageUrls = { null, "   ", ""};
+
+		for (String url : invalidImageUrls) {
+
+			try {
+
+				validator.validateImageURL(url);
+
+			} catch (InvalidInputException e) {
+
+				assertThrows(InvalidInputException.class, () -> validator.validateImageURL(url));
+
+			}
+
+		}
+
+	}
+
+//	test the image url with different invalid inputs
+
+	@Test
+	void testImageUrlWithInvalid() {
+
+		String[] invalidImageUrls = { "http://example.com/image", "https://example.com/image.",
+				"ftp://example.com/image.pdf", "htp://example.com/image.jpg", "http:/example.com/image.jpg",
+				"http://example.com/image.png?param=value", "https://example.com/image;param=value",
+				"file:///C:/path/to/image.jpg", "https://example.com/image.mp3", "ftp://example.com/image_png" };
+
+		for (String url : invalidImageUrls) {
+
+			try {
+
+				validator.validateImageURL(url);
+
+			} catch (InvalidInputException e) {
+
+				assertThrows(InvalidInputException.class, () -> validator.validateImageURL(url));
+
+			}
+
+		}
+
+	}
+	
+	 
 
 
 

@@ -2,7 +2,6 @@ package com.fssa.sharetorise.model;
 
 import java.time.LocalDate;
 import java.util.List;
-import java.util.Set;
 
 /*
  * 
@@ -11,34 +10,55 @@ import java.util.Set;
  * */
 public class FundRaiser {
 
-	private int fundraiserId;// ===============
+	private int userId;
 
-	private String title;// ===============
+	private int fundraiserId;// 
 
-	private String description;// ===============
+	private String title;// 
 
-	private double fundingGoal;// ===============
+	private String description;
 
-	private LocalDate fundEndingDate;// ===============
+	private double fundingGoal;
+
+	private LocalDate fundEndingDate;// 
 
 	private String imageUrl;
 
 	private List<Certificate> certificate;// create set 1-img1;2-img2
 
-	public FundRaiser() {
+	private List<Video> video;
+	
+	private SportsCategories category;
 
+	public SportsCategories getCategory() {
+		return category;
 	}
 
-	public FundRaiser(int fundraiserId, String title, String description, double fundingGoal, LocalDate fundEndingDate,
-			String imageUrl, List<Certificate> certificate) {
-		this.fundraiserId = fundraiserId;
-		this.title = title;
-		this.description = description;
-		this.fundingGoal = fundingGoal;
-		this.fundEndingDate = fundEndingDate;
-		this.imageUrl = imageUrl;
-		this.certificate = certificate;
+	public void setCategory(SportsCategories category) {
+		this.category = category;
+	}
 
+	public List<Video> getVideo() {
+		return video;
+	}
+
+	public double raised_amount;
+
+	public double getRaised_amount() {
+		return raised_amount;
+	}
+
+	public void setRaised_amount(double raised_amount) {
+		this.raised_amount = raised_amount;
+	}
+
+	public void setVideo(List<Video> video) {
+		this.video = video;
+	}
+
+	public FundRaiser() {
+
+		// Private constructor
 	}
 
 	public int getFundraiserId() {
@@ -97,11 +117,23 @@ public class FundRaiser {
 		this.certificate = certificate;
 	}
 
+	public int getUserId() {
+		return userId;
+	}
+
+	public void setUserId(int userId) {
+		this.userId = userId;
+	}
+
+	
 	@Override
 	public String toString() {
-		return "FundRaiser [fundraiserId=" + fundraiserId + ", title=" + title + ", description=" + description
-				+ ", fundingGoal=" + fundingGoal + ", fundEndingDate=" + fundEndingDate + ", imageUrl=" + imageUrl
-				+ ", certificate=" + certificate + "]";
+		return "FundRaiser [userId=" + userId + ", fundraiserId=" + fundraiserId + ", title=" + title + ", description="
+				+ description + ", fundingGoal=" + fundingGoal + ", fundEndingDate=" + fundEndingDate + ", imageUrl="
+				+ imageUrl + ", certificate=" + certificate + ", video=" + video + ", category=" + category
+				+ ", raised_amount=" + raised_amount + "]";
 	}
+
+	
 
 }

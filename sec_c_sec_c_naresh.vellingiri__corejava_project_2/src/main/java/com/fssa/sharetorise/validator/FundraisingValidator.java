@@ -29,9 +29,10 @@ public class FundraisingValidator {
 		validateDescription(fund.getDescription());
 		validateFundingGoal(fund.getFundingGoal());
 		validateFundEndingDate(fund.getFundEndingDate());
-
+		validateImageURL(fund.getImageUrl());
 		return true;
 	}
+	
 
 	/**
 	 * Validates the title of a fundraiser.
@@ -44,7 +45,7 @@ public class FundraisingValidator {
 	 */
 	public boolean validateTitle(String title) throws InvalidInputException {
 		// Check if the title is not null, not empty, and at least 30 characters long
-		if (title == null || title.equals("") || title.length() < 10 || title.length() > 20) {
+		if (title == null || title.equals("") || title.length() < 10 || title.length() > 30) {
 			throw new InvalidInputException(FundraiserErrors.INVALID_TITLE_NAME);
 		}
 
@@ -112,14 +113,7 @@ public class FundraisingValidator {
 		return true;
 	}
 
-	/**
-	 * Validates the ending date for a fundraiser.
-	 * 
-	 * @param fundEndingDate The ending date to validate.
-	 * @return true if the ending date is valid.
-	 * @throws InvalidInputException if the ending date is null or if it is before
-	 *                                 the current date.
-	 */
+	
 	public boolean validateFundEndingDate(LocalDate fundEndingDate) throws InvalidInputException {
 		// Check if the ending date is not null and is not before the current date
 		if (fundEndingDate == null) {
@@ -146,8 +140,6 @@ public class FundraisingValidator {
 	}
 	
 	
-	
-	
 	public boolean validateCertificateURL(String certificateUrl) throws InvalidInputException {
 		// Check if the title is not null, not empty, and at least 30 characters long
 		if (certificateUrl == null || certificateUrl.equals("") || certificateUrl.length()<=0) {
@@ -156,7 +148,7 @@ public class FundraisingValidator {
 
 		// Use a regular expression to check if the title contains only letters (no
 		// numbers or special characters)
-		String nameregex = "^(http(s):\\/\\/.)[-a-zA-Z0-9@:%._\\+~#=]{2,256}\\.[a-z]{2,6}\\b([-a-zA-Z0-9@:%_\\+.~#?&//=]*)$";
+		String nameregex = "\\b(?:https?|ftp)://\\S+\\.(?:jpg|jpeg|png|gif|bmp)\\b";
 		Pattern pattern = Pattern.compile(nameregex);
 		Matcher matcher = pattern.matcher(certificateUrl);
 		Boolean isMatch = matcher.matches();
@@ -170,9 +162,10 @@ public class FundraisingValidator {
 	}
 	
 	
+	
+	
 	public boolean validateCertificateNumber(String certificateNumber) throws InvalidInputException {
 	    // Check if the certificate number is not null, not empty, and meets length requirements
-		System.out.println(certificateNumber.length());
 	    if (certificateNumber == null || certificateNumber.isEmpty() || certificateNumber.length() < 8) {
 	        throw new InvalidInputException(FundraiserErrors.INVALID_CERTIFICATE_NUM);
 	    }
@@ -194,9 +187,26 @@ public class FundraisingValidator {
 	
 	
 	
-	
-	
-	
+	public boolean validateImageURL(String certificateUrl) throws InvalidInputException {
+		// Check if the title is not null, not empty, and at least 30 characters long
+		if (certificateUrl == null || certificateUrl.equals("") || certificateUrl.length()<=0) {
+			throw new InvalidInputException(FundraiserErrors.INVALID_CERTIFICATE_URL);
+		}
+
+		// Use a regular expression to check if the title contains only letters (no
+		// numbers or special characters)
+//		String nameregex = "\\b(?:https?|ftp)://\\S+\\.(?:jpg|jpeg|png|gif|bmp)\\b";
+//		Pattern pattern = Pattern.compile(nameregex);
+//		Matcher matcher = pattern.matcher(certificateUrl);
+//		Boolean isMatch = matcher.matches();
+//
+//		// If the title does not match the regular expression, it is considered invalid
+//		if (!isMatch) {
+//			throw new InvalidInputException(FundraiserErrors.INVALID_CERTIFICATE_URL);
+//		}
+//
+		return true;
+	}
 	
 	
 	
