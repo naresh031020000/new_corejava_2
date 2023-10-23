@@ -52,6 +52,8 @@ public class FundraiserService {
 
 			if (fundraiser.getCertificate().isEmpty() && fundraiser.getVideo().isEmpty()) {
 
+				System.out.println("one");
+
 				// call basic DAO Method
 				return dao.updateFundraiser(fundraiser, id);
 
@@ -59,15 +61,21 @@ public class FundraiserService {
 
 			else if (fundraiser.getVideo().isEmpty()) {
 
+				System.out.println("two");
+
+				return dao.updateFundraiserWithCer(fundraiser, id);
+
 				// call the basic and cert method
-				return dao.updateFundraiserWithVideo(fundraiser, id);
+
 			}
 
 			else if (fundraiser.getCertificate().isEmpty()) {
-				return dao.updateFundraiserWithCer(fundraiser, id);
+
+				System.out.println("three");
+				return dao.updateFundraiserWithVideo(fundraiser, id);
 
 			} else {
-
+				System.out.println("four");
 				// call the all the method to add all the details
 				return dao.updateFundraiserWithAll(fundraiser, id);
 			}
@@ -108,12 +116,18 @@ public class FundraiserService {
 		}
 	}
 
-	public boolean donateFundint(double amount, int userId, int fundRaiserId) throws DAOException {
+	public boolean donateFundint(double amount, int userId, int fundRaiserId, String phone, String razor, boolean isayn)
+			throws DAOException {
 
-		if (true) {
-			return donateFundDao.donateFund(amount, userId, fundRaiserId);
+		if (phone == null) {
+
+			return donateFundDao.donateFund(amount, userId, fundRaiserId, phone, razor, isayn);
+
+		} else {
+
+			return donateFundDao.donateFundWithNull(amount, fundRaiserId, phone, razor, isayn);
+
 		}
-		return false;
 
 	}
 

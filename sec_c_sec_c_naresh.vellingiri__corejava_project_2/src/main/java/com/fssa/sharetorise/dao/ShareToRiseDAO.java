@@ -1,7 +1,6 @@
 package com.fssa.sharetorise.dao;
 
 import java.sql.Connection;
-
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -11,8 +10,10 @@ import java.util.List;
 
 import com.fssa.sharetorise.exceptions.DAOException;
 import com.fssa.sharetorise.model.Certificate;
+import com.fssa.sharetorise.model.Donation;
 import com.fssa.sharetorise.model.FundRaiser;
 import com.fssa.sharetorise.model.SportsCategories;
+import com.fssa.sharetorise.model.User;
 import com.fssa.sharetorise.model.Video;
 import com.fssa.sharetorise.util.ConnectionUtil;
 
@@ -529,9 +530,11 @@ public class ShareToRiseDAO {
 			try (PreparedStatement pst = con.prepareStatement(sql)) {
 
 				pst.setInt(1, id);
+				System.out.println(id);
 
 				deleteCertificates(id);
-				deleteVideoLinks(id);
+				deleteVideoLinks(id); 
+				deleteDonation(id);
 
 				int rows = pst.executeUpdate();
 
@@ -542,6 +545,7 @@ public class ShareToRiseDAO {
 			}
 
 		} catch (SQLException e) {
+			e.printStackTrace();
 
 			throw new DAOException("Failed to delete the fundraiser." + e.getMessage());
 		}
@@ -549,7 +553,32 @@ public class ShareToRiseDAO {
 		return true;
 	}
 
-	public boolean deleteCertificates(int id) throws DAOException {
+	public boolean deleteDonation(int fundraiserId)
+
+			throws DAOException {
+
+		try (Connection con = ConnectionUtil.getConnection()) {
+
+			String sql = "DELETE FROM donation WHERE fundraiser_id = ?";
+			
+
+			try (PreparedStatement preparedStatement = con.prepareStatement(sql)) {
+
+				preparedStatement.setInt(1, fundraiserId);
+				
+				int affectedRows = preparedStatement.executeUpdate();
+
+			}
+
+			return true;
+
+		} catch (SQLException ex) {
+			throw new DAOException("Failed to Delete the donation details. " + ex.getMessage());
+		}
+
+	}
+	
+    public boolean deleteCertificates(int id) throws DAOException {
 		try (Connection con = ConnectionUtil.getConnection()) {
 			String sql = "DELETE FROM certificates WHERE fundraiser_id = ?";
 			try (PreparedStatement pst = con.prepareStatement(sql)) {
@@ -581,6 +610,7 @@ public class ShareToRiseDAO {
 
 	public FundRaiser getFundRaiserById(int id) throws SQLException {
 
+
 		try (Connection con = ConnectionUtil.getConnection()) {
 
 			String query = "SELECT id,title,description,funding_goal,image_url,fund_ending_date,raised_amount,sports_type FROM fundraiser WHERE id = ?";
@@ -609,6 +639,35 @@ public class ShareToRiseDAO {
 		return null;
 
 	}
+	
+	public User getUserByFundraiserId(int id) throws DAOException {
+	    User user = null; // Initialize as null to handle cases where no user is found
+
+	    try (Connection con = ConnectionUtil.getConnection()) {
+	        String query = "SELECT user_id, first_name, last_name, email, phone, password, is_active FROM users WHERE id = ?";
+
+	        try (PreparedStatement preparedStatement = con.prepareStatement(query)) {
+	            preparedStatement.setInt(1, id);
+	            ResultSet resultSet = preparedStatement.executeQuery();
+
+	            if (resultSet.next()) {
+	                user = new User();
+	                user.setUserId(resultSet.getInt("user_id"));
+	                user.setFirstName(resultSet.getString("first_name"));
+	                user.setLastName(resultSet.getString("last_name"));
+	                user.setEmail(resultSet.getString("email"));
+	                user.setPassword(resultSet.getString("password"));
+	                user.setActive(resultSet.getBoolean("is_active"));
+	            }
+	        }
+	    } catch (SQLException e) {
+	        // Handle the exception as needed, e.g., log it or throw a custom exception
+	        e.printStackTrace();
+	    }
+
+	    return user;
+	}
+
 
 	public List<FundRaiser> getAllFundraiserByUserId(int id) throws DAOException {
 
@@ -650,10 +709,43 @@ public class ShareToRiseDAO {
 
 		return allFundraiserByUserId;
 	}
+	
+	public List<Donation> getAllDonationsByUserId(int userId) throws DAOException {
+	    List<Donation> allDonations = new ArrayList<>();
 
-	public static void main(String[] args) {
+	    try (Connection con = ConnectionUtil.getConnection()) {
+	        String sql = "SELECT fundraiser_id, donation_amount FROM donation WHERE donated_user_id = ?";
+
+	        try (PreparedStatement pst = con.prepareStatement(sql)) {
+	            pst.setInt(1, userId);
+	            
+
+	            try (ResultSet rs = pst.executeQuery()) {
+	                while (rs.next()) {
+	                    Donation donation = new Donation();
+	                    donation.setFundraiser_id(rs.getInt("fundraiser_id"));
+	                    donation.setDonation_amount(rs.getInt("donation_amount"));
+	                    allDonations.add(donation);
+	                }
+
+	            }
+	            
+	            
+	        }
+	    } catch (SQLException e) {
+	        throw new DAOException("Failed to read all donations: " + e.getMessage());
+	    }
+
+	    return allDonations;
+	}
+
+
+
+	public static void main(String[] args)  {
 		ShareToRiseDAO d = new ShareToRiseDAO();
-		System.out.println(d.getAllFundraiserByUserId(3));
+		System.out.println(d.getAllDonationsByUserId(1));
+//		System.out.println(d.getUserByFundraiserId(17));
+
 
 	}
 

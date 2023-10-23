@@ -11,17 +11,49 @@ import com.fssa.sharetorise.util.ConnectionUtil;
 
 public class DonateFundDao {
 
-	public boolean donateFund(double amount, int userId, int fundRaiserId) throws DAOException {
+	public boolean donateFund(double amount, int userId, int fundRaiserId, String phone, String razor, boolean isayn)
+			throws DAOException {
 
 		try (Connection con = ConnectionUtil.getConnection()) {
 
-			String sql = "INSERT INTO donation (donation_amount, donated_user_id, fundraiser_id) VALUES (?, ?, ?)";
+			String sql = "INSERT INTO donation (donation_amount, donated_user_id, fundraiser_id,phone_number,razorpay_id,is_anonymous) VALUES (?, ?, ?,?,?,?)";
 
 			try (PreparedStatement preparedStatement = con.prepareStatement(sql)) {
 
 				preparedStatement.setDouble(1, amount);
 				preparedStatement.setInt(2, userId);
 				preparedStatement.setInt(3, fundRaiserId);
+				preparedStatement.setString(4, phone);
+				preparedStatement.setString(5, razor);
+				preparedStatement.setBoolean(6, isayn);
+
+				int affectedRows = preparedStatement.executeUpdate();
+
+				updateDonateFund(amount, fundRaiserId);
+			}
+
+			return true;
+
+		} catch (SQLException ex) {
+			throw new DAOException("Failed to insert the fundraiser into the donated  database. " + ex.getMessage());
+		}
+
+	}
+
+	public boolean donateFundWithNull(double amount, int fundRaiserId, String phone, String razor, boolean isayn)
+			throws DAOException {
+
+		try (Connection con = ConnectionUtil.getConnection()) {
+
+			String sql = "INSERT INTO donation (donation_amount,fundraiser_id,phone_number,razorpay_id,is_anonymous) VALUES (?, ?, ?,?,?)";
+
+			try (PreparedStatement preparedStatement = con.prepareStatement(sql)) {
+
+				preparedStatement.setDouble(1, amount);
+				preparedStatement.setInt(2, fundRaiserId);
+				preparedStatement.setString(3, phone);
+				preparedStatement.setString(4, razor);
+				preparedStatement.setBoolean(5, isayn);
 
 				int affectedRows = preparedStatement.executeUpdate();
 
